@@ -75,8 +75,8 @@ kubectl port-forward -n logging svc/kibana 5601:5601
 # Open http://localhost:5601
 
 # Flask App
-kubectl port-forward -n application svc/flask-app 5000:5000
-# Open http://localhost:5000
+kubectl port-forward -n application svc/flask-app 5001:5001
+# Open http://localhost:5001
 ```
 
 ## Configuration
@@ -84,7 +84,7 @@ kubectl port-forward -n application svc/flask-app 5000:5000
 Customize infrastructure in `terraform/variables.tf`:
 
 ```hcl
-cluster_name = "efk-demo"
+cluster_name = "efk-monitoring"
 nodes = 2
 memory = "6144"
 cpus = "4"
