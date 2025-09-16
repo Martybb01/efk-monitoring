@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kibana-config
+  labels:
+    app: kibana
+data:
+  kibana.yml: |
+    # Simple Kibana configuration
+    server.host: "0.0.0.0"
+    server.port: 5601
+    server.name: "kibana"
+    
+    # Elasticsearch connection
+    elasticsearch.hosts: ["http://elasticsearch:9200"]
+    
+    # Disable security for simplicity
+    xpack.security.enabled: false
+    
+    # Performance settings for local development
+    elasticsearch.requestTimeout: 30000
+    elasticsearch.shardTimeout: 30000

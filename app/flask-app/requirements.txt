@@ -1,0 +1,2 @@
+# Simple Flask dependencies
+Flask==3.0.0

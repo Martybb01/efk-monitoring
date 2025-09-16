@@ -1,0 +1,16 @@
+apiVersion: v2
+name: flask-app
+description: A Helm chart for Flask demo application with structured logging
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - flask
+  - python
+  - logging
+  - demo
+maintainers:
+  - name: marboccu
+    email: marboccu@lol.it
+annotations:
+  category: Application

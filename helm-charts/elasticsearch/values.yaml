@@ -1,0 +1,9 @@
+# Simple values for local development
+image:
+  repository: docker.elastic.co/elasticsearch/elasticsearch
+  tag: "8.11.0"
+  pullPolicy: IfNotPresent
+
+# Storage configuration
+storage:
+  size: 10Gi

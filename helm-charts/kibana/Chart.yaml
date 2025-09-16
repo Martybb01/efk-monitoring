@@ -1,0 +1,20 @@
+apiVersion: v2
+name: kibana
+description: A Helm chart for Kibana dashboard for log visualization
+type: application
+version: 0.1.0
+appVersion: "8.11.0"
+keywords:
+  - kibana
+  - visualization
+  - logging
+  - efk
+  - dashboard
+home: https://www.elastic.co/kibana/
+sources:
+  - https://github.com/elastic/kibana
+maintainers:
+  - name: marboccu
+    email: marboccu@lol.it
+annotations:
+  category: Analytics

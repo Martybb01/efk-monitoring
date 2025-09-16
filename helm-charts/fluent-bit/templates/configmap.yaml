@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  labels:
+    app: fluent-bit
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Daemon Off
+        Flush 1
+        Log_Level info
+        HTTP_Server On
+        HTTP_Listen 0.0.0.0
+        HTTP_Port 2020
+        Parsers_File parsers.conf
+
+    [INPUT]
+        Name tail
+        Path /var/log/containers/*flask-app*.log
+        Tag flask
+        Refresh_Interval 5
+
+    [FILTER]
+        Name parser
+        Match flask
+        Key_Name log
+        Parser docker_json
+        Reserve_Data Off
+
+    [FILTER]
+        Name parser
+        Match flask
+        Key_Name log
+        Parser flask_json
+        Reserve_Data Off
+
+    [FILTER]
+        Name record_modifier
+        Match flask
+        Allowlist_key @timestamp
+        Allowlist_key timestamp
+        Allowlist_key level
+        Allowlist_key component
+        Allowlist_key message
+        Allowlist_key data
+        Allowlist_key background_task
+        Allowlist_key uptime_minutes
+        Allowlist_key endpoint
+
+    [OUTPUT]
+        Name es
+        Match flask
+        Host elasticsearch.logging.svc.cluster.local
+        Port 9200
+        Index flask-logs
+        Suppress_Type_Name On
+
+  parsers.conf: |
+    [PARSER]
+        Name docker_json
+        Format json
+        Time_Key time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
+        Time_Keep Off
+
+    [PARSER]
+        Name flask_json
+        Format json
+        Time_Key timestamp
+        Time_Format %Y-%m-%dT%H:%M:%S.%LZ
+        Time_Keep On
