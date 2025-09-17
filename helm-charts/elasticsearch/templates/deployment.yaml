@@ -28,12 +28,8 @@ spec:
               value: "false"
             - name: ES_JAVA_OPTS
               value: "-Xms1g -Xmx1g"
-            - name: cluster.name
-              value: "efk-logs"
             - name: node.name
               value: "elasticsearch-node"
-            - name: bootstrap.memory_lock
-              value: "false"
           resources:
             limits:
               cpu: 1000m
