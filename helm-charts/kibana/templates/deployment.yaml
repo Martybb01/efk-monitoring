@@ -29,10 +29,6 @@ spec:
               value: "kibana"
             - name: XPACK_SECURITY_ENABLED
               value: "false"
-          volumeMounts:
-            - name: config
-              mountPath: /usr/share/kibana/config/kibana.yml
-              subPath: kibana.yml
           resources:
             limits:
               cpu: 500m
@@ -40,7 +36,3 @@ spec:
             requests:
               cpu: 100m
               memory: 512Mi
-      volumes:
-        - name: config
-          configMap:
-            name: kibana-config
