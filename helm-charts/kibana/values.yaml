@@ -1,4 +1,3 @@
-# Simple values for local development
 image:
   repository: docker.elastic.co/kibana/kibana
   tag: "8.11.0"

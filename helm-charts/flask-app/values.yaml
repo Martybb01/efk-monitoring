@@ -1,4 +1,3 @@
-# Simple values for local development
 image:
   repository: flask-demo-app
   tag: "latest"

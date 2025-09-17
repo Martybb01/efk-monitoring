@@ -1,12 +1,11 @@
-# Simple values for local development
 image:
   repository: fluent/fluent-bit
   tag: "3.0.7"
   pullPolicy: IfNotPresent
 
 serviceAccount:
-  create: false  # Usiamo quello creato da Terraform
+  create: false
   name: "fluent-bit"
 
 rbac:
-  create: false  # Usiamo quello creato da Terraform
+  create: false

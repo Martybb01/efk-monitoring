@@ -5,9 +5,10 @@ metadata:
   labels:
     app: kibana
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
     - port: 5601
       targetPort: 5601
+      nodePort: 30601
   selector:
     app: kibana

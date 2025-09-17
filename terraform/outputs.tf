@@ -37,29 +37,10 @@ output "helm_releases" {
   }
 }
 
-output "access_commands" {
-  description = "Commands to access services"
-  value = {
-    kibana        = "kubectl port-forward -n logging svc/kibana 5601:5601"
-    elasticsearch = "kubectl port-forward -n logging svc/elasticsearch 9200:9200"
-    flask_app     = "kubectl port-forward -n application svc/flask-app 5000:5000"
-  }
-}
-
 output "next_steps" {
   description = "Next steps after deployment"
   value = <<-EOT
     EFK Stack deployed successfully!
-    
-    Access services:
-    • Kibana: kubectl port-forward -n logging svc/kibana 5601:5601
-      Then open: http://localhost:5601
-    
-    • Flask App: kubectl port-forward -n application svc/flask-app 5000:5000
-      Then open: http://localhost:5000
-    
-    • Elasticsearch: kubectl port-forward -n logging svc/elasticsearch 9200:9200
-      Then open: http://localhost:9200
     
     Monitor logs:
     • kubectl logs -f -l app=flask-app -n application

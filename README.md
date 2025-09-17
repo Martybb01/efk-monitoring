@@ -69,14 +69,21 @@ helm upgrade --install flask-app ./helm-charts/flask-app -n application --create
 
 ## Access Services
 
-```bash
-# Kibana (logs visualization)
-kubectl port-forward -n logging svc/kibana 5601:5601
-# Open http://localhost:5601
+Services are exposed via NodePort and accessible directly:
 
-# Flask App
-kubectl port-forward -n application svc/flask-app 5001:5001
-# Open http://localhost:5001
+```bash
+# Get Minikube IP
+MINIKUBE_IP=$(minikube ip --profile=efk-monitoring)
+
+# Access services
+# Kibana: http://$MINIKUBE_IP:30601
+# Flask App: http://$MINIKUBE_IP:30420
+# Elasticsearch: http://$MINIKUBE_IP:30200
+```
+
+Or simply run the test script to see the URLs:
+```bash
+./test-complete-stack.sh
 ```
 
 ## Configuration
