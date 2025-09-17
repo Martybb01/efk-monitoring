@@ -1,4 +1,3 @@
-# Simple Terraform for local EFK testing
 terraform {
   required_providers {
     kubernetes = {
@@ -16,20 +15,19 @@ terraform {
   }
 }
 
-# Start Minikube
 resource "null_resource" "minikube" {
   provisioner "local-exec" {
     command = <<-EOT
-      echo "🚀 Starting Minikube cluster..."
+      echo "Starting Minikube cluster..."
       minikube start --profile=${var.cluster_name} --nodes=${var.nodes} --memory=${var.memory} --cpus=${var.cpus}
       
-      echo "⏳ Waiting for cluster to be ready..."
+      echo "Waiting for cluster to be ready..."
       sleep 30
       
-      echo "🔍 Verifying cluster status..."
+      echo "Verifying cluster status..."
       kubectl cluster-info --context=${var.cluster_name}
       
-      echo "✅ Minikube cluster is ready!"
+      echo "Minikube cluster is ready!"
     EOT
   }
 
@@ -46,27 +44,25 @@ resource "null_resource" "minikube" {
   }
 }
 
-# Configure kubectl context
 resource "null_resource" "kubectl_config" {
   depends_on = [null_resource.minikube]
 
   provisioner "local-exec" {
     command = <<-EOT
-      echo "🔧 Configuring kubectl context..."
+      echo "Configuring kubectl context..."
       kubectl config use-context ${var.cluster_name}
       
-      echo "⏳ Waiting for API server to be ready..."
+      echo "Waiting for API server to be ready..."
       sleep 15
       
-      echo "🔍 Testing API server connection..."
+      echo "Testing API server connection..."
       kubectl get nodes --context=${var.cluster_name}
       
-      echo "✅ kubectl context configured successfully!"
+      echo "kubectl context configured successfully!"
     EOT
   }
 }
 
-# Configure providers
 provider "kubernetes" {
   config_path = "~/.kube/config"
 }
@@ -77,7 +73,6 @@ provider "helm" {
   }
 }
 
-# Create namespaces
 resource "kubernetes_namespace" "application" {
   depends_on = [null_resource.kubectl_config]
   metadata {
@@ -92,7 +87,6 @@ resource "kubernetes_namespace" "logging" {
   }
 }
 
-# Simple service account for Fluent Bit 
 resource "kubernetes_service_account" "fluent_bit" {
   depends_on = [kubernetes_namespace.logging]
   metadata {
@@ -135,7 +129,7 @@ resource "null_resource" "build_flask_image" {
 
   provisioner "local-exec" {
     command = <<-EOT
-      echo "🐳 Building Flask app Docker image..."
+      echo "Building Flask app Docker image..."
       
       # Set Docker environment and build in one command
       eval $(minikube docker-env --profile=${var.cluster_name}) && \
@@ -143,7 +137,7 @@ resource "null_resource" "build_flask_image" {
       docker build -t flask-demo-app:latest . && \
       cd ../../terraform
       
-      echo "✅ Flask app image built successfully"
+      echo "Flask app image built successfully"
     EOT
   }
 
@@ -153,7 +147,6 @@ resource "null_resource" "build_flask_image" {
   }
 }
 
-# Deploy Elasticsearch
 resource "helm_release" "elasticsearch" {
   depends_on = [kubernetes_namespace.logging, kubernetes_service_account.fluent_bit]
 
@@ -165,7 +158,7 @@ resource "helm_release" "elasticsearch" {
   values = [
     yamlencode({
       storage = {
-        size = "5Gi" # Smaller for local testing
+        size = "5Gi"
       }
     })
   ]
@@ -173,7 +166,6 @@ resource "helm_release" "elasticsearch" {
   timeout = 600
 }
 
-# Deploy Kibana
 resource "helm_release" "kibana" {
   depends_on = [helm_release.elasticsearch]
 
@@ -185,7 +177,6 @@ resource "helm_release" "kibana" {
   timeout = 600
 }
 
-# Deploy Fluent Bit
 resource "helm_release" "fluent_bit" {
   depends_on = [helm_release.elasticsearch]
 
@@ -197,7 +188,6 @@ resource "helm_release" "fluent_bit" {
   timeout = 600
 }
 
-# Deploy Flask App
 resource "helm_release" "flask_app" {
   depends_on = [null_resource.build_flask_image, kubernetes_namespace.application]
 

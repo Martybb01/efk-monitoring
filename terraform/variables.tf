@@ -1,5 +1,3 @@
-# Simple variables for EFK infrastructure
-
 variable "cluster_name" {
   description = "Name of the Minikube cluster"
   type        = string

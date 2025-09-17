@@ -104,5 +104,5 @@ kubectl logs -f deployment/flask-app -n application
 kubectl logs -f daemonset/fluent-bit -n logging
 
 # Reset if needed
-minikube delete --profile=efk-demo
+minikube delete --profile=efk-monitoring
 ```

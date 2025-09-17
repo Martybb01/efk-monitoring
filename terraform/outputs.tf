@@ -1,5 +1,3 @@
-# Simple outputs for EFK infrastructure
-
 output "cluster_name" {
   description = "Name of the Minikube cluster"
   value       = var.cluster_name
@@ -51,9 +49,9 @@ output "access_commands" {
 output "next_steps" {
   description = "Next steps after deployment"
   value = <<-EOT
-    🎉 EFK Stack deployed successfully!
+    EFK Stack deployed successfully!
     
-    📋 Access services:
+    Access services:
     • Kibana: kubectl port-forward -n logging svc/kibana 5601:5601
       Then open: http://localhost:5601
     
@@ -63,15 +61,8 @@ output "next_steps" {
     • Elasticsearch: kubectl port-forward -n logging svc/elasticsearch 9200:9200
       Then open: http://localhost:9200
     
-    🔍 Monitor logs:
+    Monitor logs:
     • kubectl logs -f -l app=flask-app -n application
     • kubectl logs -f -l app=fluent-bit -n logging
-    
-    📊 Check status:
-    • kubectl get pods -A
-    • kubectl get svc -A
-    
-    🧹 Cleanup:
-    • terraform destroy
   EOT
 }

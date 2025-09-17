@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🧹 Cleaning up EFK Stack..."
+echo "Cleaning up EFK Stack..."
 
 echo "Destroying Terraform resources..."
 cd terraform

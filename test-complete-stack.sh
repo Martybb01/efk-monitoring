@@ -14,7 +14,7 @@ kubectl wait --for=condition=ready pod -l app=flask-app -n application --timeout
 
 echo ""
 echo " Testing Flask App..."
-kubectl port-forward -n application svc/flask-app 5000:5000 &
+kubectl port-forward -n application svc/flask-app 5001:5001 &
 FLASK_PID=$!
 sleep 5
 
@@ -54,9 +54,9 @@ echo "Fluent Bit logs:"
 kubectl logs -l app=fluent-bit -n logging --tail=5
 
 echo ""
-echo "✅ EFK Stack test completed!"
+echo "EFK Stack test completed!"
 echo ""
-echo "🌐 To access services manually:"
+echo "To access services manually:"
 echo "• Kibana: kubectl port-forward -n logging svc/kibana 5601:5601"
-echo "• Flask App: kubectl port-forward -n application svc/flask-app 5000:5000"
+echo "• Flask App: kubectl port-forward -n application svc/flask-app 5001:5001"
 echo "• Elasticsearch: kubectl port-forward -n logging svc/elasticsearch 9200:9200"
