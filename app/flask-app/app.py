@@ -6,21 +6,27 @@ Simple Flask App for EFK testing with structured logging
 import json
 import time
 import threading
+import sys
+import logging
 from datetime import datetime
 from flask import Flask, jsonify
 
 app = Flask(__name__)
 
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
 def log_json(level, message, **extra):
     """Helper function to log structured JSON"""
+    timestamp = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
     log_entry = {
-        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "timestamp": timestamp,
         "level": level,
         "component": "flask-app",
         "message": message
     }
     log_entry.update(extra)
-    print(json.dumps(log_entry))
+    print(json.dumps(log_entry), file=sys.stdout, flush=True)
 
 @app.route('/')
 def index():
@@ -42,7 +48,11 @@ def health():
 @app.route('/api/data')
 def data():
     random_num = int(time.time()) % 1000
-    log_json("INFO", "Data endpoint accessed", endpoint="/api/data", generated_number=random_num)
+    log_json("INFO", "Data endpoint accessed", 
+             endpoint="/api/data", 
+             generated_number=random_num,
+             data=random_num,
+             response_message="Sample data generated")
     return jsonify({
         'data': random_num,
         'message': 'Sample data generated',
@@ -51,7 +61,10 @@ def data():
 
 @app.route('/api/error')
 def error():
-    log_json("ERROR", "Test error endpoint accessed", endpoint="/api/error", error_type="test_error")
+    log_json("ERROR", "Test error endpoint accessed", 
+             endpoint="/api/error", 
+             error_type="test_error",
+             error_message="Test error for logging")
     return jsonify({
         'error': 'Test error for logging',
         'timestamp': datetime.utcnow().isoformat() + "Z"

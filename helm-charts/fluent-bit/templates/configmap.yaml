@@ -19,54 +19,41 @@ data:
         Name tail
         Path /var/log/containers/*flask-app*.log
         Tag flask
+        Parser docker
         Refresh_Interval 5
 
     [FILTER]
         Name parser
         Match flask
         Key_Name log
-        Parser docker_json
-        Reserve_Data Off
-
-    [FILTER]
-        Name parser
-        Match flask
-        Key_Name log
         Parser flask_json
-        Reserve_Data Off
+        Reserve_Data On
+        Preserve_Key Off
 
     [FILTER]
-        Name record_modifier
+        Name modify
         Match flask
-        Allowlist_key @timestamp
-        Allowlist_key timestamp
-        Allowlist_key level
-        Allowlist_key component
-        Allowlist_key message
-        Allowlist_key data
-        Allowlist_key background_task
-        Allowlist_key uptime_minutes
-        Allowlist_key endpoint
+        Add source fluent-bit-parsed
 
     [OUTPUT]
         Name es
-        Match flask
+        Match *
         Host elasticsearch.logging.svc.cluster.local
         Port 9200
         Index flask-logs
+        Logstash_Format On
+        Logstash_Prefix flask-logs
         Suppress_Type_Name On
 
   parsers.conf: |
     [PARSER]
-        Name docker_json
+        Name docker
         Format json
         Time_Key time
         Time_Format %Y-%m-%dT%H:%M:%S.%L
-        Time_Keep Off
 
     [PARSER]
         Name flask_json
         Format json
         Time_Key timestamp
         Time_Format %Y-%m-%dT%H:%M:%S.%LZ
-        Time_Keep On
