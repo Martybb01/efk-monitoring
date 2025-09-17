@@ -31,7 +31,7 @@ curl -s http://$MINIKUBE_IP:30200/_cat/indices
 
 echo ""
 echo "Testing Kibana..."
-curl -s http://$MINIKUBE_IP:30601/api/status | jq '.status.overall.summary' || echo "Kibana starting..."
+curl -s http://$MINIKUBE_IP:30601/api/status | jq '.status.overall.nickname' || echo "Kibana starting..."
 
 echo ""
 echo "Checking logs flow..."

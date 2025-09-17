@@ -1,4 +1,4 @@
 image:
   repository: docker.elastic.co/kibana/kibana
-  tag: "8.11.0"
+  tag: "7.17.15"
   pullPolicy: IfNotPresent

@@ -29,6 +29,8 @@ spec:
               value: "kibana"
             - name: XPACK_SECURITY_ENABLED
               value: "false"
+            - name: XPACK_REPORTING_KIBANASERVER_HOSTNAME
+              value: "kibana.logging.svc.cluster.local"
           resources:
             limits:
               cpu: 500m
